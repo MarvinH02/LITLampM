@@ -34,11 +34,11 @@ function stopMatrix(res) {
 }
 
 // API endpoints
-app.get('/start-demo', (req, res) => {
+app.get('/stop-demo', (req, res) => {
     startMatrix(res);
 });
 
-app.get('/stop-demo', (req, res) => {
+app.get('/start-demo', (req, res) => {
     stopMatrix(res);
 });
 
