@@ -1,6 +1,7 @@
 const express = require('express');
 const { exec } = require('child_process');
 const cors = require('cors');
+const sharp = require('sharp');
 const app = express();
 const port = 3000;
 
@@ -33,6 +34,33 @@ function stopMatrix(res) {
     });
 }
 
+// Function to display image
+function displayImage(imagePath, res) {
+    sharp(imagePath)
+        .resize(64, 64) // Assuming 64x64 LED matrix
+        .toBuffer()
+        .then(buffer => {
+            const command = `sudo ./led-image-viewer --led-no-hardware-pulse --led-rows=64 --led-cols=64 --led-slowdown-gpio=2 -`;
+            const child = exec(command, { cwd: demoPath });
+            child.stdin.write(buffer);
+            child.stdin.end();
+
+            child.on('exit', () => res.send('Image displayed successfully.'));
+        })
+        .catch(err => {
+            console.error(`Error processing image: ${err}`);
+            res.status(500).send(`Error processing image: ${err.message}`);
+        });
+}
+
+// API endpoint to display image
+app.post('/display-image', (req, res) => {
+    const { imagePath } = req.body;
+    displayImage(imagePath, res);
+});
+
+
+
 // API endpoints
 app.get('/stop-demo', (req, res) => {
     startMatrix(res);
@@ -41,6 +69,9 @@ app.get('/stop-demo', (req, res) => {
 app.get('/start-demo', (req, res) => {
     stopMatrix(res);
 });
+
+
+
 
 app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);
