@@ -1,0 +1,6 @@
+Humidity: 23.03%, Pressure: 1025.46 hPa, Temperature: 25.11 C
+Humidity: 23.03%, Pressure: 1025.44 hPa, Temperature: 25.10 C
+Humidity: 23.23%, Pressure: 1025.47 hPa, Temperature: 25.06 C
+Humidity: 23.39%, Pressure: 1025.47 hPa, Temperature: 25.06 C
+Humidity: 23.24%, Pressure: 1025.35 hPa, Temperature: 25.00 C
+Humidity: 23.23%, Pressure: 1025.41 hPa, Temperature: 24.99 C
