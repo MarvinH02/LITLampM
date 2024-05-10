@@ -1,0 +1,6 @@
+10@raspberrypi ~/D/s/matrix_control (main) [SIGINT]> sudo node server.js
+Server listening at http://localhost:3000
+Error executing command 'sudo pkill -f demo': Error: Command failed: sudo pkill -f demo
+
+Error stopping previous demo: Error: Command failed: sudo pkill -f demo
+
