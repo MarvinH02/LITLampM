@@ -1,0 +1,14 @@
+import requests  
+from tkinter import *
+import math
+
+city_name = "Stockholm"
+api_key = "6cc8c20d3bea4394060c84ca23fd1175"
+
+def get_weather(api_key, city):
+url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}"
+
+response = requests.get(url).json()
+print(response)
+
+get_weather(api_key, city_name)

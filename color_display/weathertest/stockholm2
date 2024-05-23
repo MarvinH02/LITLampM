@@ -1,0 +1,56 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <curl/curl.h>
+#include <nlohmann/json.hpp>
+
+using namespace std;
+using json = nlohmann::json;
+
+string city_name = "Stockholm";
+string api_key = "6cc8c20d3bea4394060c84ca23fd1175";
+
+size_t write_callback(char *ptr, size_t size, size_t nmemb, string *data) {
+    data->append(ptr, size * nmemb);
+    return size * nmemb;
+}
+
+void get_weather(const string& api_key, const string& city) {
+    CURL *curl;
+    CURLcode res;
+    string url = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + api_key;
+    string response_body;
+
+    curl = curl_easy_init();
+    if (curl) {
+        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_body);
+
+        res = curl_easy_perform(curl);
+        curl_easy_cleanup(curl);
+
+        if (res == CURLE_OK) {
+            json response = json::parse(response_body);
+
+            string city_name = response["name"];
+            cout << "City: " << city_name << endl;
+
+            double temp_kelvin = response["main"]["temp"];
+            int temp_celsius = static_cast<int>(floor(temp_kelvin - 273.15));
+            cout << "Temperature: " << temp_celsius << "°C" << endl;
+
+            string weather = response["weather"][0]["description"];
+            cout << "Weather: " << weather << endl;
+        } else {
+            cerr << "Error: " << curl_easy_strerror(res) << endl;
+        }
+    } else {
+        cerr << "Failed to initialize CURL" << endl;
+    }
+}
+
+int main() {
+    get_weather(api_key, city_name);
+    return 0;
+}
